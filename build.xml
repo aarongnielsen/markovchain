@@ -1,0 +1,45 @@
+<project name="markovchain" default="buildall">
+
+	<description>A brief demonstration of a Markov chain algorithm</description>
+	
+	<property name="run.param.inputfile1" location="./sample-input/sample1.txt"/>
+	<property name="run.param.inputfile2" location="./sample-input/sample2.txt"/>
+	<property name="run.param.prefixwords" value="2"/>
+	<property name="run.param.outputwords" value="50"/>
+
+    <target name="clean">
+        <delete dir="build"/>
+    </target>
+
+    <target name="compile">
+        <mkdir dir="build/classes"/>
+        <javac srcdir="src" destdir="build/classes" includeantruntime="false"/>
+    </target>
+
+    <target name="jar">
+        <mkdir dir="build/jar"/>
+        <jar destfile="build/jar/MarkovChain.jar" basedir="build/classes">
+            <manifest>
+                <attribute name="Main-Class" value="org.aarongnielsen.markovchain.cli.Demo"/>
+            </manifest>
+        </jar>
+    </target>
+
+    <target name="run">
+    		<echo message="Sample output:"/>
+        <java jar="build/jar/MarkovChain.jar" fork="true">
+	    		<arg value="${run.param.inputfile1}"/>
+    			<arg value="${run.param.prefixwords}"/>
+    			<arg value="${run.param.outputwords}"/>
+        	</java>
+        <java jar="build/jar/MarkovChain.jar" fork="true">
+	    		<arg value="${run.param.inputfile2}"/>
+    			<arg value="${run.param.prefixwords}"/>
+    			<arg value="${run.param.outputwords}"/>
+        	</java>
+    </target>
+
+	<target name="buildall" depends="clean, compile, jar, run">
+	</target>
+
+</project>
